@@ -14,11 +14,12 @@ import {
 } from "react-native";
 
 const initialState = {
+  login: "",
   email: "",
   password: "",
 };
 
-export default function LoginScreen() {
+export default function PostsScreen() {
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [state, setState] = useState(initialState);
 
@@ -44,9 +45,20 @@ export default function LoginScreen() {
                 marginBottom: isShowKeyboard ? 0 : 100,
               }}
             >
-              <Text style={styles.inputTitle}>Увійти</Text>
-
+              <Text style={styles.inputTitle}>ТУТ БУДУТЬ КОЛИСЬ ПОСТИ</Text>
               <View style={{ marginTop: 23 }}>
+                <TextInput
+                  style={styles.textInput}
+                  textAlign={"left"}
+                  onFocus={() => setIsShowKeyboard(true)}
+                  placeholder="Login"
+                  value={state.login}
+                  onChangeText={(value) =>
+                    setState((prevState) => ({ ...prevState, login: value }))
+                  }
+                />
+              </View>
+              <View style={{ marginTop: 16 }}>
                 <TextInput
                   style={styles.textInput}
                   textAlign={"left"}
@@ -76,11 +88,9 @@ export default function LoginScreen() {
                 activeOpacity={0.6}
                 onPress={keyboardHide}
               >
-                <Text style={styles.titleBtn}>Увійти</Text>
+                <Text style={styles.titleBtn}>Зареєструватись</Text>
               </TouchableOpacity>
-              <Text style={styles.afterBtn}>
-                Немає аккаунта? Зареєструватись
-              </Text>
+              <Text style={styles.afterBtn}>Вже є аккаунт? Увійти</Text>
             </View>
           </KeyboardAvoidingView>
         </ImageBackground>
