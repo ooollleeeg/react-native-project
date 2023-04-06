@@ -1,179 +1,182 @@
-import React, { useState, useEffect } from "react";
+import { useState } from "react";
+import { useNavigation } from "@react-navigation/native";
+import { View, Text, TouchableOpacity, TextInput } from "react-native";
+import Toast from "react-native-toast-message";
 
+import { authStyles } from "./authStyles";
+import KeyboardWrapper from "../../components/KeyboardWrapper/KeyboardWrapper";
+import { AddAvatarIcon, EyeOffIcon, EyeOnIcon } from "../../components/svg";
 import {
-  StyleSheet,
-  Text,
-  View,
-  ImageBackground,
-  TextInput,
-  TouchableOpacity,
-  Platform,
-  KeyboardAvoidingView,
-  Keyboard,
-  TouchableWithoutFeedback,
-  Dimensions,
-  Button,
-} from "react-native";
-import { Directions } from "react-native-gesture-handler";
+  toastConfig,
+  successRegistrationToast,
+  errorFormToast,
+} from "../../components/utils/toasts";
 
-const initialState = {
-  login: "",
+const {
+  form,
+  title,
+  addAvatar,
+  addAvatarBtn,
+  formInput,
+  input,
+  loginBtn,
+  loginBtnTitle,
+  showPasswordBtn,
+  passwordInput,
+  isAccount,
+  isAccountText,
+} = authStyles;
+
+const initialUserData = {
+  userName: "",
   email: "",
   password: "",
 };
 
-function RegistrationScreen() {
-  const [isShowKeyboard, setIsShowKeyboard] = useState(false);
-  const [state, setState] = useState(initialState);
+const initialFocus = {
+  userName: false,
+  email: false,
+  password: false,
+};
 
-  const [dimensions, setDimensions] = useState(
-    Dimensions.get("window").width - 20 * 2
-  );
+const RegistrationScreen = () => {
+  const [userData, setUserData] = useState(initialUserData);
+  const [isShowPassword, setIsShowPassword] = useState(false);
+  const [isKeyboard, setIsKeyboard] = useState(false);
+  const [isFocus, setIsFocus] = useState(initialFocus);
 
-  useEffect(() => {
-    const onChange = () => {
-      const width = Dimensions.get("window").width - 20 * 2;
-      setDimensions(width);
-    };
-    Dimensions.addEventListener("change", onChange);
-    return () => {
-      Dimensions.removeEventListener("change", onChange);
-    };
-  }, []);
+  const navigation = useNavigation();
 
-  const keyboardHide = () => {
-    setIsShowKeyboard(false);
-    Keyboard.dismiss();
-    setState(initialState);
+  const handleGoToLogin = () => {
+    navigation.navigate("login");
+  };
+
+  const handleFocus = (inputName) => {
+    setIsKeyboard(true);
+    setIsFocus((prevState) => ({ ...prevState, [inputName]: true }));
+  };
+
+  const handleEndFocus = (inputName) => {
+    setIsKeyboard(false);
+    setIsFocus((prevState) => ({ ...prevState, [inputName]: false }));
+  };
+
+  const onSubmitForm = () => {
+    const { userName, email, password } = userData;
+
+    if (!userName || !email || !password) {
+      errorFormToast();
+      return;
+    }
+    successRegistrationToast();
+
+    setIsKeyboard(false);
+    console.log(userData);
+    setUserData(initialUserData);
   };
 
   return (
-    <TouchableWithoutFeedback onPress={keyboardHide}>
-      <View style={styles.container}>
-        <ImageBackground
-          style={styles.image}
-          source={require("../../assets/images/cafee.png")}
-        >
-          <KeyboardAvoidingView
-            behavior={Platform.OS == "IOS" ? "padding" : "height"}
-          >
-            <View
+    <KeyboardWrapper>
+      <View
+        style={{
+          ...form,
+          paddingBottom: isKeyboard ? 32 : 78,
+        }}
+      >
+        <View style={addAvatar}>
+          <TouchableOpacity>
+            <AddAvatarIcon style={addAvatarBtn} />
+          </TouchableOpacity>
+        </View>
+        <Text style={title}>Registration</Text>
+        <View style={formInput}>
+          <TextInput
+            style={{
+              ...input,
+              borderColor: isFocus.userName ? "#FF6C00" : "#E8E8E8",
+            }}
+            keyboardType="default"
+            placeholder="Login"
+            placeholderTextColor="#BDBDBD"
+            value={userData.userName}
+            onFocus={() => handleFocus("userName")}
+            onEndEditing={() => handleEndFocus("userName")}
+            onChangeText={(value) =>
+              setUserData((prevState) => ({
+                ...prevState,
+                userName: value.trim(),
+              }))
+            }
+          />
+          <TextInput
+            style={{
+              ...input,
+              borderColor: isFocus.email ? "#FF6C00" : "#E8E8E8",
+            }}
+            keyboardType="email-address"
+            placeholder="Email"
+            placeholderTextColor="#BDBDBD"
+            value={userData.email}
+            onFocus={() => handleFocus("email")}
+            onEndEditing={() => handleEndFocus("email")}
+            onChangeText={(value) =>
+              setUserData((prevState) => ({
+                ...prevState,
+                email: value.trim(),
+              }))
+            }
+          />
+          <View style={passwordInput}>
+            <TextInput
               style={{
-                ...styles.form,
-                marginBottom: isShowKeyboard ? 20 : 150,
-                width: dimensions,
+                ...input,
+                borderColor: isFocus.password ? "#FF6C00" : "#E8E8E8",
               }}
+              secureTextEntry={!isShowPassword}
+              keyboardType="default"
+              placeholder="Password"
+              placeholderTextColor="#BDBDBD"
+              value={userData.password}
+              onFocus={() => handleFocus("password")}
+              onEndEditing={() => handleEndFocus("password")}
+              onChangeText={(value) =>
+                setUserData((prevState) => ({
+                  ...prevState,
+                  password: value.trim(),
+                }))
+              }
+            />
+            <TouchableOpacity
+              style={showPasswordBtn}
+              activeOpacity={0.5}
+              onPress={() => setIsShowPassword((prev) => !prev)}
             >
-              <Text style={styles.inputTitle}>Реєстрація</Text>
-              <View style={{ marginTop: 23 }}>
-                <TextInput
-                  style={styles.textInput}
-                  textAlign={"left"}
-                  onFocus={() => setIsShowKeyboard(true)}
-                  placeholder="Login"
-                  value={state.login}
-                  onChangeText={(value) =>
-                    setState((prevState) => ({ ...prevState, login: value }))
-                  }
-                />
-              </View>
-              <View style={{ marginTop: 16 }}>
-                <TextInput
-                  style={styles.textInput}
-                  textAlign={"left"}
-                  onFocus={() => setIsShowKeyboard(true)}
-                  placeholder="Email"
-                  value={state.email}
-                  onChangeText={(value) =>
-                    setState((prevState) => ({ ...prevState, email: value }))
-                  }
-                />
-              </View>
-              <View style={{ marginTop: 16 }}>
-                <TextInput
-                  placeholder="Password"
-                  style={styles.textInput}
-                  textAlign={"left"}
-                  secureTextEntry={true}
-                  onFocus={() => setIsShowKeyboard(true)}
-                  value={state.password}
-                  onChangeText={(value) =>
-                    setState((prevState) => ({ ...prevState, password: value }))
-                  }
-                />
-              </View>
-              <TouchableOpacity
-                style={styles.button}
-                activeOpacity={0.6}
-                onPress={keyboardHide}
-              >
-                <Text style={styles.titleBtn}>Зареєструватись</Text>
-              </TouchableOpacity>
-              <Button
-                // style={styles.transitionBtn}
-                title="Вже є аккаунт? Увійти"
-                onPress={() => navigation.navigate("Login")}
-              />
-            </View>
-          </KeyboardAvoidingView>
-        </ImageBackground>
+              {isShowPassword ? <EyeOnIcon /> : <EyeOffIcon />}
+            </TouchableOpacity>
+          </View>
+        </View>
+        {!isKeyboard && (
+          <>
+            <TouchableOpacity
+              style={loginBtn}
+              activeOpacity={0.7}
+              onPress={onSubmitForm}
+            >
+              <Text style={loginBtnTitle}>Register</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={isAccount}
+              activeOpacity={0.7}
+              onPress={handleGoToLogin}
+            >
+              <Text style={isAccountText}>Already have an account? Log in</Text>
+            </TouchableOpacity>
+          </>
+        )}
       </View>
-    </TouchableWithoutFeedback>
+      <Toast position="top" topOffset={60} config={toastConfig} />
+    </KeyboardWrapper>
   );
-}
+};
 
 export default RegistrationScreen;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  image: {
-    flex: 1,
-    resizeMode: "cover",
-    justifyContent: "flex-end",
-  },
-  form: {
-    padding: 30,
-
-    backgroundColor: "#f0ffff",
-    borderRadius: 30,
-  },
-  textInput: {
-    borderWidth: 1,
-    borderColor: "#800080",
-    height: 40,
-    color: "#212121",
-    fontSize: 25,
-    fontWeight: "bold",
-    borderRadius: 8,
-    paddingLeft: 16,
-  },
-  inputTitle: {
-    textAlign: "center",
-    fontSize: 30,
-    fontWeight: 500,
-    height: 50,
-    // fontFamily: "Roboto-Regular",
-  },
-  button: {
-    height: 51,
-    marginTop: 43,
-    borderRadius: 100,
-    justifyContent: "center",
-    alignItems: "center",
-    ...Platform.select({
-      ios: { backgroundColor: "transparent" },
-      android: { backgroundColor: "#ff6c00" },
-    }),
-  },
-  titleBtn: {
-    fontSize: 16,
-    color: "#f0ffff",
-  },
-  transitionBtn: {
-    textAlign: "center",
-    marginTop: 16,
-    fontSize: 16,
-  },
-});
