@@ -8,7 +8,7 @@ const { imgTitle, numberCommentsStyle, locationStyle, infoWrapper } =
   postItemStyles;
 
 const PostItem = ({ photo }) => {
-  const { picture, title, comments, location } = photo;
+  const { picture, title, comments, location } = photo.item;
   const numberComments = comments.length;
 
   return (

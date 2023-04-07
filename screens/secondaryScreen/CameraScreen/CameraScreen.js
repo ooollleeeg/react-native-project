@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import { format } from "date-fns";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { Text, View, TouchableOpacity, Image } from "react-native";
 import { Camera } from "expo-camera";
@@ -14,16 +14,19 @@ const {
   cameraBtnOut,
   cameraBtnInner,
   othersBtn,
+  othersBtnText,
   previewPhotoWrapper,
   previewPhoto,
 } = cameraStyles;
 
-const CameraOpen = () => {
+const CameraScreen = ({ route }) => {
   const [cameraRef, setCameraRef] = useState(null);
   const [photo, setPhoto] = useState(null);
   const [hasPermission, setHasPermission] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
   const navigation = useNavigation();
+
+  const fromScreen = route.params.fromScreen;
 
   useEffect(() => {
     (async () => {
@@ -41,7 +44,24 @@ const CameraOpen = () => {
 
   const savePhoto = () => {
     // add save in Redux storage
-    navigation.navigate("registration");
+    switch (fromScreen) {
+      case "registration":
+        navigation.navigate("registration", { photoUri: photo });
+        break;
+      case "profile":
+        navigation.navigate("Profile", { photoUri: photo });
+        break;
+      case "createPost":
+        navigation.navigate("CreatePost", { photoUri: photo });
+        break;
+      default:
+        break;
+    }
+    // if (fromScreen === "registration") {
+    //   navigation.navigate("registration", { photoUri: photo });
+    // } else {
+    //   navigation.navigate("Profile", { photoUri: photo });
+    // }
   };
 
   return (
@@ -63,7 +83,7 @@ const CameraOpen = () => {
           )}
           <View style={photoView}>
             <TouchableOpacity
-              style={{ ...othersBtn, left: 70 }}
+              style={{ ...othersBtn, left: 50 }}
               onPress={() => {
                 setType(
                   type === Camera.Constants.Type.back
@@ -72,19 +92,21 @@ const CameraOpen = () => {
                 );
               }}
             >
-              <Text style={{ fontSize: 24, color: "#FFF" }}>Flip</Text>
+              <Text style={othersBtnText}>Flip</Text>
             </TouchableOpacity>
             <TouchableOpacity style={cameraBtnWrapper} onPress={makePhoto}>
               <View style={cameraBtnOut}>
                 <View style={cameraBtnInner}></View>
               </View>
             </TouchableOpacity>
-            <TouchableOpacity
-              style={{ ...othersBtn, right: 20 }}
-              onPress={savePhoto}
-            >
-              <Text style={{ fontSize: 24, color: "#FFF" }}>Save photo</Text>
-            </TouchableOpacity>
+            {photo && (
+              <TouchableOpacity
+                style={{ ...othersBtn, right: 30 }}
+                onPress={savePhoto}
+              >
+                <Text style={othersBtnText}>Save photo</Text>
+              </TouchableOpacity>
+            )}
           </View>
         </Camera>
       ) : (
@@ -94,8 +116,8 @@ const CameraOpen = () => {
   );
 };
 
-CameraOpen.propTypes = {
+CameraScreen.propTypes = {
   onTakePhoto: PropTypes.func,
 };
 
-export default CameraOpen;
+export default CameraScreen;

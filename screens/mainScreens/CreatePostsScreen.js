@@ -7,7 +7,10 @@ import {
   TextInput,
   TouchableOpacity,
   ScrollView,
+  Image,
 } from "react-native";
+import { v4 as uuidv4 } from "uuid";
+import "react-native-get-random-values";
 
 import { screenStyles } from "./screenStyles";
 import {
@@ -29,40 +32,37 @@ const {
   inputStyle,
 } = screenStyles;
 
-const initialValue = { title: "", location: "" };
+const initialValue = { id: null, picture: "", title: "", location: "" };
 
-const CreatePostsScreen = () => {
+const CreatePostsScreen = ({ route }) => {
   const [value, setValue] = useState(initialValue);
   const [isActiveBtn, setIsActiveBtn] = useState(false);
   const [isKeyboard, setIsKeyboard] = useState(false);
+  const [photoUri, setPhotoUri] = useState(null); // get from Redux or null
   const navigation = useNavigation();
 
-  const { title, location } = value;
+  const { id, picture, title, location } = value;
 
   useEffect(() => {
-    if (title && location) {
+    setPhotoUri(route.params?.photoUri);
+    setValue({ ...value, picture: route.params?.photoUri, id: uuidv4() });
+  }, [route.params]);
+
+  useEffect(() => {
+    if (title && location && picture) {
       setIsActiveBtn(true);
     } else setIsActiveBtn(false);
   }, [title, location]);
-
-  const handleGoBack = () => {
-    navigation.navigate("Posts");
-  };
 
   const handleChangeInput = (name, value) => {
     setValue((prev) => ({ ...prev, [name]: value }));
   };
 
-  const clearInputs = () => {
-    setValue(initialValue);
-  };
-
   const onSubmitForm = () => {
-    const { title, location } = value;
-    console.log({ title, location });
     setIsKeyboard(false);
     setValue(initialValue);
-    handleGoBack();
+    setPhotoUri(null);
+    navigation.navigate("Posts");
   };
 
   return (
@@ -71,7 +71,7 @@ const CreatePostsScreen = () => {
         <TouchableOpacity
           style={goBackBtn}
           activeOpacity={0.7}
-          onPress={handleGoBack}
+          onPress={() => navigation.navigate("Posts")}
         >
           <ArrowLeftIcon />
         </TouchableOpacity>
@@ -80,12 +80,44 @@ const CreatePostsScreen = () => {
       <ScrollView>
         <View style={{ paddingHorizontal: 16, paddingVertical: 32 }}>
           <View>
-            <TouchableOpacity style={cameraBox} activeOpacity={0.7}>
-              <View style={camera}>
-                <CameraIcon />
-              </View>
-            </TouchableOpacity>
-            <Text style={createPhotoText}> Upload photo</Text>
+            {!photoUri && (
+              <>
+                <TouchableOpacity
+                  style={cameraBox}
+                  activeOpacity={0.7}
+                  onPress={() => {
+                    navigation.navigate("camera", {
+                      fromScreen: "createPost",
+                    });
+                  }}
+                >
+                  <View style={camera}>
+                    <CameraIcon />
+                  </View>
+                </TouchableOpacity>
+                <Text style={createPhotoText}> Download photo</Text>
+              </>
+            )}
+            {photoUri && (
+              <>
+                <TouchableOpacity
+                  style={cameraBox}
+                  activeOpacity={0.7}
+                  onPress={() => {
+                    navigation.navigate("camera", { fromScreen: "createPost" });
+                  }}
+                >
+                  <Image
+                    style={{ height: 240, width: "100%", borderRadius: 8 }}
+                    source={{ uri: photoUri }}
+                  />
+                  <View style={camera}>
+                    <CameraIcon />
+                  </View>
+                </TouchableOpacity>
+                <Text style={createPhotoText}> Edit photo</Text>
+              </>
+            )}
           </View>
 
           <View style={{ paddingTop: 32, gap: 16 }}>
@@ -109,13 +141,13 @@ const CreatePostsScreen = () => {
               onEndEditing={() => setIsKeyboard(false)}
               onChangeText={(value) => handleChangeInput("location", value)}
             ></TextInput>
-            <MapPinIcon style={{ position: "absolute", bottom: 29 }} />
+            <MapPinIcon style={{ position: "absolute", bottom: 28 }} />
           </View>
           {!isKeyboard && (
             <>
               <MainButton
                 title="Publish"
-                onSubmitForm={{ onSubmitForm }}
+                onSubmitForm={onSubmitForm}
                 isActive={isActiveBtn}
               />
             </>
@@ -124,11 +156,11 @@ const CreatePostsScreen = () => {
       </ScrollView>
       {!isKeyboard && (
         <TouchableOpacity
-          style={{ position: "absolute", bottom: 0, alignSelf: "center" }}
-          onPress={clearInputs}
+          style={{ position: "absolute", bottom: 16, alignSelf: "center" }}
+          onPress={() => setValue(initialValue)}
           disabled={!isActiveBtn}
         >
-          <TrashIcon />
+          <TrashIcon isActive={isActiveBtn} />
         </TouchableOpacity>
       )}
     </KeyboardWrapper>

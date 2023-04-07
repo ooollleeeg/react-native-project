@@ -1,32 +1,51 @@
 import PropTypes from "prop-types";
 import { useState, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
-import { View, TouchableOpacity } from "react-native";
+import { View, Image, TouchableOpacity } from "react-native";
 
-import { globalStyles } from "../../components/utils/globalStyles";
+import { avatarStyles } from "./avatarStyles";
 import { AddAvatarIcon, RemoveAvatarIcon } from "../svg";
 
-const Avatar = ({ isAvatar = false }) => {
-  // add state photoUri
+const { avatarBox, avatarStyle, addIcon, removeIcon } = avatarStyles;
+const Avatar = ({ photoUri, fromScreen }) => {
+  const [avatarUri, setAvatarUri] = useState(null);
   const navigation = useNavigation();
 
-  const handleGoToCamera = () => {
-    navigation.navigate("camera");
-  };
+  useEffect(() => {
+    if (photoUri) {
+      setAvatarUri(photoUri);
+    }
+  }, [photoUri]);
+
+  // change avatarBox to real photo from Redux
 
   return (
-    <TouchableOpacity style={globalStyles.avatarBox} onPress={handleGoToCamera}>
-      {isAvatar ? (
-        <RemoveAvatarIcon style={{ marginTop: 75, marginLeft: 101 }} />
-      ) : (
-        <AddAvatarIcon style={{ marginTop: 81, marginLeft: 107 }} />
+    <>
+      {!avatarUri && (
+        <TouchableOpacity
+          style={avatarBox}
+          onPress={() => {
+            navigation.navigate("camera", { fromScreen });
+          }}
+        >
+          <AddAvatarIcon style={addIcon} />
+        </TouchableOpacity>
       )}
-    </TouchableOpacity>
+      {avatarUri && (
+        <TouchableOpacity onPress={() => setAvatarUri(null)}>
+          <View style={avatarBox}>
+            <Image style={avatarStyle} source={{ uri: avatarUri }} />
+            <RemoveAvatarIcon style={removeIcon} />
+          </View>
+        </TouchableOpacity>
+      )}
+    </>
   );
 };
 
 Avatar.propTypes = {
-  isAvatar: PropTypes.bool,
+  photoUri: PropTypes.string,
+  fromScreen: PropTypes.string.isRequired,
 };
 
 export default Avatar;

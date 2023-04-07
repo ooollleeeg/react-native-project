@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 import {
   View,
@@ -39,14 +39,22 @@ const initialFocus = {
   password: false,
 };
 
-const RegistrationScreen = () => {
+const RegistrationScreen = ({ route }) => {
   const [userData, setUserData] = useState(initialUserData);
   const [isShowPassword, setIsShowPassword] = useState(false);
   const [isKeyboard, setIsKeyboard] = useState(false);
   const [isFocus, setIsFocus] = useState(initialFocus);
-  const [avatarUri, setAvatarUri] = useState(null); // get avatarUri from Redux or null
+  const [photoUri, setPhotoUri] = useState(null); // get from Redux or null
 
   const navigation = useNavigation();
+
+  useEffect(() => {
+    setPhotoUri(null);
+  }, []);
+
+  useEffect(() => {
+    setPhotoUri(route.params?.photoUri);
+  }, [route.params]);
 
   const handleGoToLogin = () => {
     navigation.navigate("login");
@@ -69,11 +77,13 @@ const RegistrationScreen = () => {
       errorFormToast();
       return;
     }
-    navigation.navigate("home", { userName, email }); //Local for training - delete after end of project
+    navigation.navigate("home", { userName, email, photoUri }); //Local for training - delete after end of project
 
     setIsKeyboard(false);
     setUserData(initialUserData);
   };
+
+  // add prop for Avatar for change icon
 
   return (
     <KeyboardWrapper>
@@ -87,7 +97,7 @@ const RegistrationScreen = () => {
             paddingBottom: isKeyboard ? 32 : 78,
           }}
         >
-          <Avatar /> {/* add prop for Avatar for change icon */}
+          <Avatar photoUri={photoUri} fromScreen="registration" />
           <Text style={globalStyles.title}>Registration</Text>
           <View style={formInput}>
             <TextInput

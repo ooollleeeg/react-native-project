@@ -55,10 +55,7 @@ export const screenStyles = StyleSheet.create({
     lineHeight: 15,
     color: "rgba(33, 33, 33, 0.8)",
   },
-  imgWrapper: {
-    gap: 32,
-    paddingBottom: 32,
-  },
+
   imgTitle: {
     fontFamily: fonts.robotoMedium,
     fontSize: 16,
@@ -72,11 +69,14 @@ export const screenStyles = StyleSheet.create({
     borderRadius: 8,
     borderWidth: 1,
     borderColor: "#E8E8E8",
-    alignItems: "center",
-    justifyContent: "center",
+    // alignItems: "center",
+    // justifyContent: "center",
     marginBottom: 8,
   },
   camera: {
+    position: "absolute",
+    top: "40%",
+    left: "42%",
     width: 60,
     height: 60,
     backgroundColor: "#FFF",

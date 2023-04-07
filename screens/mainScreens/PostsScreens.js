@@ -1,12 +1,12 @@
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 import {
   SafeAreaView,
   View,
   Text,
   TouchableOpacity,
-  ScrollView,
   Image,
+  FlatList,
 } from "react-native";
 import Toast from "react-native-toast-message";
 
@@ -14,7 +14,7 @@ import { screenStyles } from "./screenStyles";
 import { LogOutIcon } from "../../components/svg";
 import PostItem from "../../components/PostItem/PostItem";
 import { toastConfig, successLoginToast } from "../../components/utils/toasts";
-import { photos } from "../../components/utils/imgTraining"; //Local photos for training - delete after end of project
+import { photos as initialPhotos } from "../../components/utils/imgTraining"; //Local photos for training - delete after end of project
 
 const {
   header,
@@ -24,13 +24,11 @@ const {
   avatar,
   avatarName,
   avatarEmail,
-  imgWrapper,
 } = screenStyles;
 
 const PostsScreen = ({ route }) => {
-  const {
-    userData: { userName, email },
-  } = route.params;
+  const [photos, setPhotos] = useState(initialPhotos);
+  const { userName, email, photoUri } = route.params;
   const navigation = useNavigation();
 
   useEffect(() => successLoginToast(), []);
@@ -55,7 +53,7 @@ const PostsScreen = ({ route }) => {
         <View style={{ flexDirection: "row", alignItems: "center" }}>
           <Image
             style={avatar}
-            source={require("../../assets/images/imgTraining/-5188596587406932582_121.jpg")} //Local photo for training - delete after end of project
+            source={{ uri: photoUri }} //Local photo for training - delete after end of project
           ></Image>
           <View>
             <Text style={avatarName}>{userName}</Text>
@@ -63,17 +61,16 @@ const PostsScreen = ({ route }) => {
           </View>
         </View>
       </View>
-      <ScrollView>
-        <View style={{ ...imgWrapper, paddingLeft: 16 }}>
-          {photos.map((photo) => {
-            return (
-              <View style={{ gap: 8 }} key={photo.id}>
-                <PostItem photo={photo} />
-              </View>
-            );
-          })}
-        </View>
-      </ScrollView>
+      <FlatList
+        style={{ paddingLeft: 16 }}
+        data={photos}
+        keyExtractor={(photo) => photo.id}
+        renderItem={(photo) => (
+          <View style={{ marginBottom: 32, gap: 8 }}>
+            <PostItem photo={photo} />
+          </View>
+        )}
+      />
       <Toast position="top" topOffset={60} config={toastConfig} />
     </SafeAreaView>
   );

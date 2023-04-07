@@ -21,14 +21,6 @@ export const globalStyles = StyleSheet.create({
     paddingHorizontal: 16,
   },
 
-  avatarBox: {
-    marginTop: -60,
-    width: 120,
-    height: 120,
-    borderRadius: 16,
-    alignSelf: "center",
-    backgroundColor: "#F6F6F6",
-  },
   title: {
     fontFamily: fonts.robotoMedium,
     fontSize: 30,
