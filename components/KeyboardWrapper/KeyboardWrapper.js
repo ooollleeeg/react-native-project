@@ -54,7 +54,6 @@ const KeyboardWrapper = ({ children }) => {
         </KeyboardAvoidingView>
         <StatusBar style="auto" />
       </SafeAreaView>
-      //{" "}
     </TouchableWithoutFeedback>
   );
 };

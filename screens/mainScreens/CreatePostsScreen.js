@@ -85,7 +85,7 @@ const CreatePostsScreen = () => {
                 <CameraIcon />
               </View>
             </TouchableOpacity>
-            <Text style={createPhotoText}> Download photo</Text>
+            <Text style={createPhotoText}> Upload photo</Text>
           </View>
 
           <View style={{ paddingTop: 32, gap: 16 }}>
