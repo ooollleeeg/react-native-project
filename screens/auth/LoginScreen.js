@@ -17,7 +17,6 @@ import { EyeOffIcon, EyeOnIcon } from "../../components/svg";
 import { toastConfig, errorFormToast } from "../../components/utils/toasts";
 
 const {
-  title,
   formInput,
   input,
   showPasswordBtn,

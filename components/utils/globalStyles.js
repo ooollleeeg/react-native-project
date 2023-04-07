@@ -25,9 +25,9 @@ export const globalStyles = StyleSheet.create({
     marginTop: -60,
     width: 120,
     height: 120,
-    backgroundColor: "#F6F6F6",
     borderRadius: 16,
     alignSelf: "center",
+    backgroundColor: "#F6F6F6",
   },
   title: {
     fontFamily: fonts.robotoMedium,
