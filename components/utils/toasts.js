@@ -4,13 +4,6 @@ import Toast, {
   InfoToast,
 } from "react-native-toast-message";
 
-export const successRegistrationToast = () =>
-  Toast.show({
-    type: "success",
-    text1: "You have registered",
-    text2: "Enjoy creating your own ImageBook",
-  });
-
 export const successLoginToast = () =>
   Toast.show({
     type: "success",
@@ -24,6 +17,13 @@ export const errorFormToast = () =>
     text1: "Error. What a shame!",
     text2: "All fields must not be empty",
   });
+
+// export const successCreatePost = () =>
+//   Toast.show({
+//     type: "success",
+//     text1: "Post was added in collection",
+//     text2: "Watch the comments and reviews",
+//   });
 
 export const toastConfig = {
   success: (props) => (

@@ -1,9 +1,9 @@
 import { StyleSheet } from "react-native";
-import { fonts } from "../../utils/fonts";
+import { fonts } from "../../components/utils/fonts";
 
 export const screenStyles = StyleSheet.create({
   header: {
-    height: 60,
+    height: 80,
     flexDirection: "row",
     width: "100%",
     borderBottomWidth: 0.5,
@@ -16,6 +16,10 @@ export const screenStyles = StyleSheet.create({
     position: "absolute",
     right: 16,
   },
+  goBackBtn: {
+    position: "absolute",
+    left: 16,
+  },
   headerTitle: {
     fontFamily: fonts.robotoMedium,
     fontSize: 17,
@@ -27,10 +31,14 @@ export const screenStyles = StyleSheet.create({
     paddingHorizontal: 16,
     gap: 32,
   },
+  tabMenu: {
+    height: 83,
+    paddingTop: 9,
+    boxShadow: "0px -0.5px 0px rgba(0, 0, 0, 0.3)",
+  },
   avatar: {
     width: 60,
     height: 60,
-    backgroundColor: "#F6F6F6",
     borderRadius: 16,
     marginRight: 8,
   },
@@ -50,7 +58,6 @@ export const screenStyles = StyleSheet.create({
   imgWrapper: {
     gap: 32,
     paddingBottom: 32,
-    marginLeft: 16,
   },
   imgTitle: {
     fontFamily: fonts.robotoMedium,
@@ -58,20 +65,35 @@ export const screenStyles = StyleSheet.create({
     lineHeight: 19,
     color: "#212121",
   },
-  numberCommentsStyle: {
-    fontFamily: fonts.robotoRegular,
-    fontSize: 16,
-    lineHeight: 19,
-    color: "#BDBDBD",
-    marginLeft: 6,
-    marginRight: 40,
+  cameraBox: {
+    height: 240,
+    width: "100%",
+    backgroundColor: "#F6F6F6",
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: "#E8E8E8",
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 8,
   },
-  locationStyle: {
+  camera: {
+    width: 60,
+    height: 60,
+    backgroundColor: "#FFF",
+    borderRadius: 30,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
+  createPhotoText: {
     fontFamily: fonts.robotoRegular,
     fontSize: 16,
     lineHeight: 19,
     color: "#212121",
-    textDecorationLine: "underline",
-    marginLeft: 6,
+  },
+  inputStyle: {
+    height: 50,
+    borderBottomWidth: 1,
+    borderBottomColor: "#BDBDBD",
   },
 });

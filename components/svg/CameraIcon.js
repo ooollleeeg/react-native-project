@@ -1,4 +1,4 @@
-import Svg, { Path, Rect, G, Defs } from "react-native-svg";
+import Svg, { Path, Rect, G, Defs, ClipPath } from "react-native-svg";
 
 const CameraIcon = (props) => {
   return (
@@ -20,9 +20,9 @@ const CameraIcon = (props) => {
         />
       </G>
       <Defs>
-        <clipPath id="clip0_36_0">
+        <ClipPath id="clip0_36_0">
           <Rect width={24} height={24} fill="white" />
-        </clipPath>
+        </ClipPath>
       </Defs>
     </Svg>
   );

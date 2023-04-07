@@ -3,20 +3,13 @@ import Svg, { Path, Circle } from "react-native-svg";
 const RemoveAvatarIcon = (props) => {
   return (
     <Svg
-      width={25}
-      height={25}
+      width={37}
+      height={37}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       {...props}
     >
-      <Circle
-        cx="18.4999"
-        cy="18.5"
-        r="12"
-        transform="rotate(-45 18.4999 18.5)"
-        fill="white"
-        stroke="#E8E8E8"
-      />
+      <Circle cx={18.5} cy={18.5} r={12} fill="white" stroke="#E8E8E8" />
       <Path
         fillRule="evenodd"
         clipRule="evenodd"

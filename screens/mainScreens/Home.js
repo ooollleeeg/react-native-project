@@ -1,11 +1,11 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import PostsScreen from "./PostsScreen";
-import CreatePostScreen from "./CreatePostsScreen";
-import ProfileScreen from "./ProfileScreen";
-import { globalStyles } from "../../components/utils/globalStyles";
+import PostsScreen from "../mainScreens/PostsScreens";
+import CreatePostsScreen from "./CreatePostsScreen";
+import ProfileScreen from "../mainScreens/ProfileScreen";
+import { screenStyles } from "../mainScreens/screenStyles";
 import { UserIcon, GridIcon, PlusIcon } from "../../components/svg";
 
-const MainTab = createBottomTabNavigator();
+export const MainTab = createBottomTabNavigator();
 
 const Home = ({ route }) => {
   const userData = route.params; //Local for training - delete after end of project
@@ -15,22 +15,23 @@ const Home = ({ route }) => {
       screenOptions={{
         headerShown: false,
         tabBarLabel: () => null,
-        tabBarStyle: globalStyles.tabMenu,
+        tabBarStyle: screenStyles.tabMenu,
       }}
     >
       <MainTab.Screen
         name="Posts"
         component={PostsScreen}
-        initialParams={{ userData: userData }} //Local for training - delete after end of project
+        initialParams={{ userData }} //Local for training - delete after end of project
         options={{
           tabBarIcon: ({ focused }) => <GridIcon focused={focused} />,
         }}
       />
       <MainTab.Screen
         name="CreatePost"
-        component={CreatePostScreen}
+        component={CreatePostsScreen}
         options={{
           tabBarIcon: ({ focused }) => <PlusIcon focused={focused} />,
+          tabBarStyle: { display: "none" },
         }}
       />
       <MainTab.Screen
@@ -38,6 +39,7 @@ const Home = ({ route }) => {
         component={ProfileScreen}
         options={{
           tabBarIcon: ({ focused }) => <UserIcon focused={focused} />,
+          tabBarStyle: { display: "none" },
         }}
       />
     </MainTab.Navigator>
