@@ -36,7 +36,7 @@ export const screenStyles = StyleSheet.create({
     paddingTop: 9,
     boxShadow: "0px -0.5px 0px rgba(0, 0, 0, 0.3)",
   },
-  avatar: {
+  avatarImg: {
     width: 60,
     height: 60,
     borderRadius: 16,
@@ -69,8 +69,6 @@ export const screenStyles = StyleSheet.create({
     borderRadius: 8,
     borderWidth: 1,
     borderColor: "#E8E8E8",
-    // alignItems: "center",
-    // justifyContent: "center",
     marginBottom: 8,
   },
   camera: {

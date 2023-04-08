@@ -12,13 +12,12 @@ export const postItemStyles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
   },
-  numberCommentsStyle: {
+  textStyle: {
     fontFamily: fonts.robotoRegular,
     fontSize: 16,
     lineHeight: 19,
-    color: "#BDBDBD",
+
     marginLeft: 6,
-    marginRight: 40,
   },
   locationStyle: {
     fontFamily: fonts.robotoRegular,

@@ -4,7 +4,8 @@ import { createStackNavigator } from "@react-navigation/stack";
 import RegistrationScreen from "./screens/auth/RegistrationScreen";
 import LoginScreen from "./screens/auth/LoginScreen";
 import Home from "./screens/mainScreens/Home";
-import CommentsScreen from "./screens/secondaryScreen/CommentsScreen";
+import CameraScreen from "./screens/secondaryScreen/CameraScreen/CameraScreen";
+import MapScreen from "./screens/secondaryScreen/MapScreen";
 
 export default function App() {
   const AuthStack = createStackNavigator();
@@ -12,13 +13,14 @@ export default function App() {
   return (
     <NavigationContainer>
       <AuthStack.Navigator
-        initialRouteName="registration"
+        initialRouteName="login"
         screenOptions={{ headerShown: false }}
       >
         <AuthStack.Screen name="registration" component={RegistrationScreen} />
         <AuthStack.Screen name="login" component={LoginScreen} />
         <AuthStack.Screen name="home" component={Home} />
-        <AuthStack.Screen name="camera" component={CommentsScreen} />
+        <AuthStack.Screen name="camera" component={CameraScreen} />
+        <AuthStack.Screen name="map" component={MapScreen} />
       </AuthStack.Navigator>
     </NavigationContainer>
   );

@@ -4,42 +4,67 @@ import { useState, useEffect } from "react";
 import Avatar from "../../components/Avatar/Avatar";
 import PostItem from "../../components/PostItem/PostItem";
 import { globalStyles } from "../../components/utils/globalStyles";
-import { photos as initialPhotos } from "../../components/utils/imgTraining"; //Local photos for training - delete after end of project
-
-const { imgBg, mainWrapper, title } = globalStyles;
 
 const ProfileScreen = ({ route }) => {
-  const [photos, setPhotos] = useState(initialPhotos);
-  const [photoUri, setPhotoUri] = useState(null); // get from Redux or null
-  const [userName, setUserName] = useState(null); // get from Redux or null
+  const [photos, setPhotos] = useState([]);
+  const [avatarUri, setAvatarUri] = useState(null); // get from Redux or null
+  const [user, setUser] = useState(null); // get from Redux or null
+
+  const {
+    userName,
+    avatar,
+    id,
+    picture,
+    title,
+    descriptionLocation,
+    latitude,
+    longitude,
+  } = route.params;
 
   useEffect(() => {
-    setPhotoUri(route.params.photoUri);
-    setUserName(route.params.userName);
+    setAvatarUri(avatar);
+    setUser(userName);
   }, [route.params]);
+
+  // Delete after Redux
+  useEffect(() => {
+    if (id) {
+      setPhotos((prev) => [
+        ...prev,
+        {
+          id,
+          picture,
+          title,
+          descriptionLocation,
+          latitude,
+          longitude,
+          comments: [],
+        },
+      ]);
+    }
+  }, [id]);
 
   return (
     <ImageBackground
-      style={imgBg}
+      style={globalStyles.imgBg}
       source={require("../../assets/images/bgImage.jpg")}
     >
       <View
         style={{
-          ...mainWrapper,
+          ...globalStyles.mainWrapper,
           flex: 0.8,
           paddingBottom: 16,
-          alignItems: "center",
         }}
       >
-        <Avatar photoUri={photoUri} fromScreen="profile" />
-        <Text style={title}>{userName}</Text>
+        <Avatar photoUri={avatarUri} fromScreen="profile" />
+        <Text style={globalStyles.title}>{user}</Text>
         <FlatList
           style={{ gap: 16 }}
           data={photos}
           keyExtractor={(photo) => photo.id}
           renderItem={(photo) => (
             <View style={{ marginBottom: 32, gap: 8 }}>
-              <PostItem photo={photo} />
+              <PostItem photo={photo} fromScreen="profile" />
             </View>
           )}
         />

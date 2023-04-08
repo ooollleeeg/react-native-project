@@ -31,6 +31,7 @@ const initialUserData = {
   userName: "",
   email: "",
   password: "",
+  avatar: null,
 };
 
 const initialFocus = {
@@ -44,16 +45,11 @@ const RegistrationScreen = ({ route }) => {
   const [isShowPassword, setIsShowPassword] = useState(false);
   const [isKeyboard, setIsKeyboard] = useState(false);
   const [isFocus, setIsFocus] = useState(initialFocus);
-  const [photoUri, setPhotoUri] = useState(null); // get from Redux or null
 
   const navigation = useNavigation();
 
   useEffect(() => {
-    setPhotoUri(null);
-  }, []);
-
-  useEffect(() => {
-    setPhotoUri(route.params?.photoUri);
+    setUserData({ ...userData, avatar: route.params?.photoUri });
   }, [route.params]);
 
   const handleGoToLogin = () => {
@@ -71,13 +67,13 @@ const RegistrationScreen = ({ route }) => {
   };
 
   const onSubmitForm = () => {
-    const { userName, email, password } = userData;
+    const { userName, email, password, avatar } = userData;
 
-    if (!userName || !email || !password) {
+    if (!userName || !email || !password || !avatar) {
       errorFormToast();
       return;
     }
-    navigation.navigate("home", { userName, email, photoUri }); //Local for training - delete after end of project
+    navigation.navigate("home", { userName, email, avatar }); //Local for training - delete after end of project
 
     setIsKeyboard(false);
     setUserData(initialUserData);
@@ -97,7 +93,7 @@ const RegistrationScreen = ({ route }) => {
             paddingBottom: isKeyboard ? 32 : 78,
           }}
         >
-          <Avatar photoUri={photoUri} fromScreen="registration" />
+          <Avatar photoUri={userData.avatar} fromScreen="registration" />
           <Text style={globalStyles.title}>Registration</Text>
           <View style={formInput}>
             <TextInput

@@ -1,28 +1,70 @@
 import PropTypes from "prop-types";
+import { useState } from "react";
 import { View, Text, Image, TouchableOpacity } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 import { postItemStyles } from "./postItemStyles";
-import { MapPinIcon, MessageOffIcon, MessageOnIcon } from "../svg";
+import {
+  MapPinIcon,
+  MessageOffIcon,
+  MessageOnIcon,
+  LikeOnIcon,
+  LikeOffIcon,
+} from "../svg";
+import { useNavigation } from "@react-navigation/native";
 
-const { imgTitle, numberCommentsStyle, locationStyle, infoWrapper } =
-  postItemStyles;
+const { imgTitle, textStyle, locationStyle, infoWrapper } = postItemStyles;
 
-const PostItem = ({ photo }) => {
-  const { picture, title, comments, location } = photo.item;
+const PostItem = ({ photo, fromScreen }) => {
+  const [likes, setLikes] = useState(0);
+
+  const navigation = useNavigation();
+  const { picture, title, descriptionLocation, latitude, longitude, comments } =
+    photo.item;
   const numberComments = comments.length;
+
+  const handleMapScreen = () => {
+    navigation.navigate("map", { latitude, longitude, fromScreen });
+  };
 
   return (
     <>
-      <Image style={{ width: 343, height: 240 }} source={picture}></Image>
+      <Image
+        style={{ width: "100%", height: 240 }}
+        source={{ uri: picture }}
+      ></Image>
       <Text style={imgTitle}>{title}</Text>
       <View style={infoWrapper}>
         <TouchableOpacity style={infoWrapper}>
           {numberComments ? <MessageOnIcon /> : <MessageOffIcon />}
-          <Text style={numberCommentsStyle}>{numberComments}</Text>
+          <Text
+            style={{
+              ...textStyle,
+              color: numberComments ? "#212121" : "#BDBDBD",
+            }}
+          >
+            {numberComments}
+          </Text>
         </TouchableOpacity>
-        <TouchableOpacity style={infoWrapper}>
+        {fromScreen === "profile" && (
+          <TouchableOpacity
+            style={infoWrapper}
+            onPress={() => setLikes(likes + 1)}
+          >
+            {likes ? <LikeOnIcon /> : <LikeOffIcon />}
+            <Text
+              style={{
+                ...textStyle,
+                color: likes ? "#212121" : "#BDBDBD",
+              }}
+            >
+              {likes}
+            </Text>
+          </TouchableOpacity>
+        )}
+        <TouchableOpacity style={infoWrapper} onPress={handleMapScreen}>
           <MapPinIcon />
-          <Text style={locationStyle}>{location}</Text>
+          <Text style={locationStyle}>{descriptionLocation}</Text>
         </TouchableOpacity>
       </View>
     </>

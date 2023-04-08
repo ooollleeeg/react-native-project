@@ -5,7 +5,6 @@ export const btnStyles = StyleSheet.create({
   mainBtn: {
     alignItems: "center",
     justifyContent: "center",
-    // width: 343,
     height: 50,
     marginTop: 32,
     borderRadius: 100,

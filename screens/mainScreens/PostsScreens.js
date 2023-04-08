@@ -14,28 +14,51 @@ import { screenStyles } from "./screenStyles";
 import { LogOutIcon } from "../../components/svg";
 import PostItem from "../../components/PostItem/PostItem";
 import { toastConfig, successLoginToast } from "../../components/utils/toasts";
-import { photos as initialPhotos } from "../../components/utils/imgTraining"; //Local photos for training - delete after end of project
 
 const {
   header,
   headerTitle,
   logoutBtn,
   mainScreenWrapper,
-  avatar,
+  avatarImg,
   avatarName,
   avatarEmail,
 } = screenStyles;
 
 const PostsScreen = ({ route }) => {
-  const [photos, setPhotos] = useState(initialPhotos);
-  const { userName, email, photoUri } = route.params;
+  const [photos, setPhotos] = useState([]);
   const navigation = useNavigation();
+  const {
+    userName,
+    email,
+    avatar,
+    id,
+    picture,
+    title,
+    descriptionLocation,
+    latitude,
+    longitude,
+  } = route.params;
 
   useEffect(() => successLoginToast(), []);
 
-  const handleLogout = () => {
-    navigation.navigate("login");
-  };
+  // Delete after Redux
+  useEffect(() => {
+    if (id) {
+      setPhotos((prev) => [
+        ...prev,
+        {
+          id,
+          picture,
+          title,
+          descriptionLocation,
+          latitude,
+          longitude,
+          comments: [],
+        },
+      ]);
+    }
+  }, [id]);
 
   return (
     <SafeAreaView style={{ marginBottom: 200 }}>
@@ -44,7 +67,7 @@ const PostsScreen = ({ route }) => {
         <TouchableOpacity
           style={logoutBtn}
           activeOpacity={0.7}
-          onPress={handleLogout}
+          onPress={() => navigation.navigate("login")}
         >
           <LogOutIcon />
         </TouchableOpacity>
@@ -52,8 +75,8 @@ const PostsScreen = ({ route }) => {
       <View style={mainScreenWrapper}>
         <View style={{ flexDirection: "row", alignItems: "center" }}>
           <Image
-            style={avatar}
-            source={{ uri: photoUri }} //Local photo for training - delete after end of project
+            style={avatarImg}
+            source={{ uri: avatar }} //Local photo for training - delete after end of project
           ></Image>
           <View>
             <Text style={avatarName}>{userName}</Text>
@@ -62,12 +85,12 @@ const PostsScreen = ({ route }) => {
         </View>
       </View>
       <FlatList
-        style={{ paddingLeft: 16 }}
+        style={{ paddingHorizontal: 16 }}
         data={photos}
         keyExtractor={(photo) => photo.id}
         renderItem={(photo) => (
           <View style={{ marginBottom: 32, gap: 8 }}>
-            <PostItem photo={photo} />
+            <PostItem photo={photo} fromScreen="posts" />
           </View>
         )}
       />
