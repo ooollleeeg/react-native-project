@@ -3,6 +3,8 @@ import { useState, useEffect } from "react";
 
 import Avatar from "../../components/Avatar/Avatar";
 import PostItem from "../../components/PostItem/PostItem";
+import { LogoutBtn } from "../../components/Buttons";
+
 import { globalStyles } from "../../components/utils/globalStyles";
 
 const ProfileScreen = ({ route }) => {
@@ -57,6 +59,7 @@ const ProfileScreen = ({ route }) => {
         }}
       >
         <Avatar photoUri={avatarUri} fromScreen="profile" />
+        <LogoutBtn />
         <Text style={globalStyles.title}>{user}</Text>
         <FlatList
           style={{ gap: 16 }}

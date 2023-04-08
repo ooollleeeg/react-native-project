@@ -2,30 +2,6 @@ import { StyleSheet } from "react-native";
 import { fonts } from "../../components/utils/fonts";
 
 export const screenStyles = StyleSheet.create({
-  header: {
-    height: 80,
-    flexDirection: "row",
-    width: "100%",
-    borderBottomWidth: 0.5,
-    borderBottomColor: "rgba(0, 0, 0, 0.3)",
-    alignItems: "center",
-    justifyContent: "center",
-    paddingHorizontal: 16,
-  },
-  logoutBtn: {
-    position: "absolute",
-    right: 16,
-  },
-  goBackBtn: {
-    position: "absolute",
-    left: 16,
-  },
-  headerTitle: {
-    fontFamily: fonts.robotoMedium,
-    fontSize: 17,
-    letterSpacing: -0.408,
-    lineHeight: 22,
-  },
   mainScreenWrapper: {
     paddingVertical: 32,
     paddingHorizontal: 16,
@@ -71,7 +47,7 @@ export const screenStyles = StyleSheet.create({
     borderColor: "#E8E8E8",
     marginBottom: 8,
   },
-  camera: {
+  cameraIcon: {
     position: "absolute",
     top: "40%",
     left: "42%",
@@ -83,7 +59,7 @@ export const screenStyles = StyleSheet.create({
     justifyContent: "center",
   },
 
-  createPhotoText: {
+  textStyle: {
     fontFamily: fonts.robotoRegular,
     fontSize: 16,
     lineHeight: 19,

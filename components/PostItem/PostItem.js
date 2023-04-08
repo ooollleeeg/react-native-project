@@ -11,7 +11,6 @@ import {
   LikeOnIcon,
   LikeOffIcon,
 } from "../svg";
-import { useNavigation } from "@react-navigation/native";
 
 const { imgTitle, textStyle, locationStyle, infoWrapper } = postItemStyles;
 
@@ -27,15 +26,19 @@ const PostItem = ({ photo, fromScreen }) => {
     navigation.navigate("map", { latitude, longitude, fromScreen });
   };
 
+  const handleCommentsScreen = () => {
+    navigation.navigate("comments", { picture });
+  };
+
   return (
     <>
       <Image
-        style={{ width: "100%", height: 240 }}
+        style={{ width: "100%", height: 240, borderRadius: 8 }}
         source={{ uri: picture }}
       ></Image>
       <Text style={imgTitle}>{title}</Text>
       <View style={infoWrapper}>
-        <TouchableOpacity style={infoWrapper}>
+        <TouchableOpacity style={infoWrapper} onPress={handleCommentsScreen}>
           {numberComments ? <MessageOnIcon /> : <MessageOffIcon />}
           <Text
             style={{
@@ -73,6 +76,7 @@ const PostItem = ({ photo, fromScreen }) => {
 
 PostItem.propTypes = {
   photo: PropTypes.object.isRequired,
+  fromScreen: PropTypes.string,
 };
 
 export default PostItem;

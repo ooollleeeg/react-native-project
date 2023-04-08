@@ -18,6 +18,13 @@ export const errorFormToast = () =>
     text2: "Avatar and all fields must not be empty",
   });
 
+export const errorComments = () =>
+  Toast.show({
+    type: "error",
+    text1: "Comment must not be empty",
+    text2: "No less than 10 and <200 characters",
+  });
+
 export const errorAcceptCamera = () =>
   Toast.show({
     type: "error",

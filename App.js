@@ -6,6 +6,7 @@ import LoginScreen from "./screens/auth/LoginScreen";
 import Home from "./screens/mainScreens/Home";
 import CameraScreen from "./screens/secondaryScreen/CameraScreen/CameraScreen";
 import MapScreen from "./screens/secondaryScreen/MapScreen";
+import CommentsScreen from "./screens/secondaryScreen/CommentsScreen";
 
 export default function App() {
   const AuthStack = createStackNavigator();
@@ -21,6 +22,7 @@ export default function App() {
         <AuthStack.Screen name="home" component={Home} />
         <AuthStack.Screen name="camera" component={CameraScreen} />
         <AuthStack.Screen name="map" component={MapScreen} />
+        <AuthStack.Screen name="comments" component={CommentsScreen} />
       </AuthStack.Navigator>
     </NavigationContainer>
   );

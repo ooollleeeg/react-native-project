@@ -16,3 +16,5 @@ export { default as TrashIcon } from "./TrashIcon";
 export { default as PlusIcon } from "./PlusIcon";
 export { default as UserIcon } from "./UserIcon";
 export { default as ChangeCameraView } from "./ChangeCameraView";
+export { default as SavePhotoIcon } from "./SavePhotoIcon";
+export { default as FlipIcon } from "./FlipIcon";

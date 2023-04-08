@@ -12,7 +12,7 @@ import Toast from "react-native-toast-message";
 import { authStyles } from "./authStyles";
 import { globalStyles } from "../../components/utils/globalStyles";
 import KeyboardWrapper from "../../components/KeyboardWrapper/KeyboardWrapper";
-import MainButton from "../../components/Buttons/MainButton";
+import { MainButton } from "../../components/Buttons";
 import { EyeOffIcon, EyeOnIcon } from "../../components/svg";
 import { toastConfig, errorFormToast } from "../../components/utils/toasts";
 
@@ -56,7 +56,7 @@ const LoginScreen = () => {
     setIsFocus((prevState) => ({ ...prevState, [inputName]: false }));
   };
 
-  const onSubmitForm = async () => {
+  const onSubmitForm = () => {
     const { email, password } = userData;
 
     if (!email || !password) {

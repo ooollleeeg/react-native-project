@@ -1,33 +1,19 @@
 import { useState, useEffect } from "react";
-import { useNavigation } from "@react-navigation/native";
-import {
-  SafeAreaView,
-  View,
-  Text,
-  TouchableOpacity,
-  Image,
-  FlatList,
-} from "react-native";
+
+import { SafeAreaView, View, Text, Image, FlatList } from "react-native";
 import Toast from "react-native-toast-message";
 
 import { screenStyles } from "./screenStyles";
-import { LogOutIcon } from "../../components/svg";
+
 import PostItem from "../../components/PostItem/PostItem";
+import Header from "../../components/Header/Header";
 import { toastConfig, successLoginToast } from "../../components/utils/toasts";
 
-const {
-  header,
-  headerTitle,
-  logoutBtn,
-  mainScreenWrapper,
-  avatarImg,
-  avatarName,
-  avatarEmail,
-} = screenStyles;
+const { mainScreenWrapper, avatarImg, avatarName, avatarEmail } = screenStyles;
 
 const PostsScreen = ({ route }) => {
   const [photos, setPhotos] = useState([]);
-  const navigation = useNavigation();
+
   const {
     userName,
     email,
@@ -62,16 +48,7 @@ const PostsScreen = ({ route }) => {
 
   return (
     <SafeAreaView style={{ marginBottom: 200 }}>
-      <View style={header}>
-        <Text style={headerTitle}>Posts</Text>
-        <TouchableOpacity
-          style={logoutBtn}
-          activeOpacity={0.7}
-          onPress={() => navigation.navigate("login")}
-        >
-          <LogOutIcon />
-        </TouchableOpacity>
-      </View>
+      <Header title="Posts" />
       <View style={mainScreenWrapper}>
         <View style={{ flexDirection: "row", alignItems: "center" }}>
           <Image
