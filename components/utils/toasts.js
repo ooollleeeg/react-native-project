@@ -18,6 +18,13 @@ export const errorRegistrationToast = () =>
     text2: "This email is already registered",
   });
 
+export const errorLoginToast = () =>
+  Toast.show({
+    type: "error",
+    text1: "Email or password is wrong",
+    text2: "Check them and try again",
+  });
+
 export const errorFormToast = () =>
   Toast.show({
     type: "error",

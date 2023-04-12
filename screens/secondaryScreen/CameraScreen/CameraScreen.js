@@ -1,5 +1,6 @@
 import { format } from "date-fns";
 import { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
 import { Text, View, TouchableOpacity, Image } from "react-native";
 import { Camera } from "expo-camera";
@@ -14,7 +15,7 @@ import {
 } from "../../../components/utils/toasts";
 import { SavePhotoIcon, FlipIcon } from "../../../components/svg";
 import { Loading } from "../../../components/utils/loading";
-
+import { changeAvatar } from "../../../redux/auth/authOperations";
 const {
   photoView,
   cameraBtnWrapper,
@@ -33,7 +34,9 @@ const CameraScreen = ({ route }) => {
   const [type, setType] = useState(Camera.Constants.Type.back);
   const [location, setLocation] = useState(null);
   const [loading, setLoading] = useState(false);
+
   const navigation = useNavigation();
+  const dispatch = useDispatch();
 
   const fromScreen = route.params.fromScreen;
 
@@ -59,6 +62,8 @@ const CameraScreen = ({ route }) => {
   };
 
   const savePhoto = () => {
+    dispatch(changeAvatar(photo));
+
     switch (fromScreen) {
       case "registration":
         navigation.navigate("registration", { photoUri: photo });

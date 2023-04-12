@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
+import { useDispatch } from "react-redux";
 import {
   View,
   Text,
@@ -14,7 +15,12 @@ import { globalStyles } from "../../components/utils/globalStyles";
 import KeyboardWrapper from "../../components/KeyboardWrapper/KeyboardWrapper";
 import { MainButton } from "../../components/Buttons";
 import { EyeOffIcon, EyeOnIcon } from "../../components/svg";
-import { toastConfig, errorFormToast } from "../../components/utils/toasts";
+import {
+  toastConfig,
+  errorFormToast,
+  errorLoginToast,
+} from "../../components/utils/toasts";
+import { authLogin } from "../../redux/auth/authOperations";
 
 const {
   formInput,
@@ -26,12 +32,12 @@ const {
 } = authStyles;
 
 const initialUserData = {
-  email: "",
+  userEmail: "",
   password: "",
 };
 
 const initialFocus = {
-  email: false,
+  userEmail: false,
   password: false,
 };
 
@@ -40,7 +46,9 @@ const LoginScreen = () => {
   const [isShowPassword, setIsShowPassword] = useState(false);
   const [isKeyboard, setIsKeyboard] = useState(false);
   const [isFocus, setIsFocus] = useState(initialFocus);
+
   const navigation = useNavigation();
+  const dispatch = useDispatch();
 
   const handleGoToRegistration = () => {
     navigation.navigate("registration");
@@ -57,16 +65,26 @@ const LoginScreen = () => {
   };
 
   const onSubmitForm = () => {
-    const { email, password } = userData;
+    const { userEmail, password } = userData;
 
-    if (!email || !password) {
+    if (!userEmail || !password) {
       errorFormToast();
       return;
     }
-    navigation.navigate("home", { email }); //Local for training - delete after end of project
 
     setIsKeyboard(false);
-    setUserData(initialUserData);
+
+    dispatch(authLogin(userData)).then((res) => {
+      const isUserExistInDB = res.user;
+
+      if (!isUserExistInDB) {
+        errorLoginToast();
+        return;
+      } else {
+        setUserData(initialUserData);
+        navigation.navigate("home");
+      }
+    });
   };
 
   return (
@@ -87,18 +105,18 @@ const LoginScreen = () => {
               style={{
                 ...input,
                 marginBottom: 16,
-                borderColor: isFocus.email ? "#FF6C00" : "#E8E8E8",
+                borderColor: isFocus.userEmail ? "#FF6C00" : "#E8E8E8",
               }}
               keyboardType="email-address"
               placeholder="Email"
               placeholderTextColor="#BDBDBD"
-              value={userData.email}
-              onFocus={() => handleFocus("email")}
-              onEndEditing={() => handleEndFocus("email")}
+              value={userData.userEmail}
+              onFocus={() => handleFocus("userEmail")}
+              onEndEditing={() => handleEndFocus("userEmail")}
               onChangeText={(value) =>
                 setUserData((prevState) => ({
                   ...prevState,
-                  email: value.trim(),
+                  userEmail: value.trim(),
                 }))
               }
             />

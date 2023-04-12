@@ -1,30 +1,24 @@
 import { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 
 import { SafeAreaView, View, Text, Image, FlatList } from "react-native";
 import Toast from "react-native-toast-message";
 
+import { toastConfig, successLoginToast } from "../../components/utils/toasts";
 import { screenStyles } from "./screenStyles";
 
 import PostItem from "../../components/PostItem/PostItem";
 import Header from "../../components/Header/Header";
-import { toastConfig, successLoginToast } from "../../components/utils/toasts";
+import { selectUser } from "../../redux/auth/authSelectors";
 
 const { mainScreenWrapper, avatarImg, avatarName, avatarEmail } = screenStyles;
 
 const PostsScreen = ({ route }) => {
+  const { userName, email, avatar } = useSelector(selectUser);
   const [photos, setPhotos] = useState([]);
 
-  const {
-    userName,
-    email,
-    avatar,
-    id,
-    picture,
-    title,
-    descriptionLocation,
-    latitude,
-    longitude,
-  } = route.params;
+  const { id, picture, title, descriptionLocation, latitude, longitude } =
+    route.params;
 
   useEffect(() => successLoginToast(), []);
 
