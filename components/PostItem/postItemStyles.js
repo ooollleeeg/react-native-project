@@ -7,6 +7,7 @@ export const postItemStyles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 19,
     color: "#212121",
+    paddingVertical: 8,
   },
   infoWrapper: {
     flexDirection: "row",

@@ -5,7 +5,6 @@ export const screenStyles = StyleSheet.create({
   mainScreenWrapper: {
     paddingVertical: 32,
     paddingHorizontal: 16,
-    gap: 32,
   },
   tabMenu: {
     height: 83,

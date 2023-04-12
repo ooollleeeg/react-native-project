@@ -35,7 +35,7 @@ const PostItem = ({ photo, fromScreen }) => {
       <Image
         style={{ width: "100%", height: 240, borderRadius: 8 }}
         source={{ uri: picture }}
-      ></Image>
+      />
       <Text style={imgTitle}>{title}</Text>
       <View style={infoWrapper}>
         <TouchableOpacity style={infoWrapper} onPress={handleCommentsScreen}>

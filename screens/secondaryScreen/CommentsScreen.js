@@ -8,14 +8,13 @@ import {
   Keyboard,
 } from "react-native";
 import Toast from "react-native-toast-message";
-import { v4 as uuidv4 } from "uuid";
 
 import { secondaryScreensStyles } from "./secondaryScreensStyles";
 import KeyboardWrapper from "../../components/KeyboardWrapper/KeyboardWrapper";
 import Header from "../../components/Header/Header";
 import CommentCard from "../../components/CommentCard/CommentCard";
 import { SendIcon } from "../../components/svg";
-import { toastConfig, errorComments } from "../../components/utils/toasts";
+import { toastConfig, errorCommentsToast } from "../../components/utils/toasts";
 
 const { commentWrapper, commentIcon, inputStyle } = secondaryScreensStyles;
 
@@ -31,14 +30,13 @@ const CommentsScreen = ({ route }) => {
 
   const handleComment = () => {
     if (!text || text.length < 10 || text.length > 200) {
-      errorComments();
+      errorCommentsToast();
       return;
     }
     setComments((prev) => [
       ...prev,
       {
-        // id: uuidv4(),
-        id: Math.random(),
+        id: Date.now(),
         textComment: text.trim(),
         dateComment: Date.now(),
       },

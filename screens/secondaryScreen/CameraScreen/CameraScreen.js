@@ -10,7 +10,7 @@ import Toast from "react-native-toast-message";
 import { cameraStyles } from "./cameraStyles";
 import {
   toastConfig,
-  errorAcceptCamera,
+  errorAcceptCameraToast,
 } from "../../../components/utils/toasts";
 import { SavePhotoIcon, FlipIcon } from "../../../components/svg";
 import { Loading } from "../../../components/utils/loading";
@@ -44,7 +44,7 @@ const CameraScreen = ({ route }) => {
       const locationStatus = await Location.requestForegroundPermissionsAsync();
       if (status === "granted" && locationStatus.status === "granted") {
         setHasPermission(true);
-      } else errorAcceptCamera();
+      } else errorAcceptCameraToast();
     })();
   }, []);
 
@@ -59,7 +59,6 @@ const CameraScreen = ({ route }) => {
   };
 
   const savePhoto = () => {
-    // add save in Redux storage
     switch (fromScreen) {
       case "registration":
         navigation.navigate("registration", { photoUri: photo });

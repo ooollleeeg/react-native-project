@@ -17,8 +17,6 @@ const Avatar = ({ photoUri, fromScreen }) => {
     }
   }, [photoUri]);
 
-  // change avatarBox to real photo from Redux
-
   return (
     <>
       {!avatarUri && (

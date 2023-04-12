@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
+import { useDispatch } from "react-redux";
 import {
   View,
   Text,
@@ -16,16 +17,16 @@ import Avatar from "../../components/Avatar/Avatar";
 import { MainButton } from "../../components/Buttons";
 
 import { EyeOffIcon, EyeOnIcon } from "../../components/svg";
-import { toastConfig, errorFormToast } from "../../components/utils/toasts";
+import {
+  toastConfig,
+  errorFormToast,
+  errorRegistrationToast,
+} from "../../components/utils/toasts";
+import { Loading } from "../../components/utils/loading";
+import { authRegistration } from "../../redux/auth/authOperations";
 
-const {
-  formInput,
-  input,
-  showPasswordBtn,
-  passwordInput,
-  isAccount,
-  isAccountText,
-} = authStyles;
+const { input, showPasswordBtn, passwordInput, isAccount, isAccountText } =
+  authStyles;
 
 const initialUserData = {
   userName: "",
@@ -47,6 +48,7 @@ const RegistrationScreen = ({ route }) => {
   const [isFocus, setIsFocus] = useState(initialFocus);
 
   const navigation = useNavigation();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     setUserData({ ...userData, avatar: route.params?.photoUri });
@@ -73,10 +75,20 @@ const RegistrationScreen = ({ route }) => {
       errorFormToast();
       return;
     }
-    navigation.navigate("home", { userName, email, avatar }); //Local for training - delete after end of project
 
     setIsKeyboard(false);
     setUserData(initialUserData);
+
+    dispatch(authRegistration(userData)).then((res) => {
+      const isUserExistInDB = !!res;
+
+      if (isUserExistInDB) {
+        errorRegistrationToast();
+        return;
+      } else {
+        navigation.navigate("home");
+      }
+    });
   };
 
   // add prop for Avatar for change icon
@@ -95,7 +107,7 @@ const RegistrationScreen = ({ route }) => {
         >
           <Avatar photoUri={userData.avatar} fromScreen="registration" />
           <Text style={globalStyles.title}>Registration</Text>
-          <View style={formInput}>
+          <View>
             <TextInput
               style={{
                 ...input,
@@ -117,6 +129,7 @@ const RegistrationScreen = ({ route }) => {
             <TextInput
               style={{
                 ...input,
+                marginBottom: 16,
                 borderColor: isFocus.email ? "#FF6C00" : "#E8E8E8",
               }}
               keyboardType="email-address"

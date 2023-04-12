@@ -62,11 +62,10 @@ const ProfileScreen = ({ route }) => {
         <LogoutBtn />
         <Text style={globalStyles.title}>{user}</Text>
         <FlatList
-          style={{ gap: 16 }}
           data={photos}
           keyExtractor={(photo) => photo.id}
           renderItem={(photo) => (
-            <View style={{ marginBottom: 32, gap: 8 }}>
+            <View style={{ marginBottom: 32 }}>
               <PostItem photo={photo} fromScreen="profile" />
             </View>
           )}
