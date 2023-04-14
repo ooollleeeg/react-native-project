@@ -1,3 +1,8 @@
+import * as firebase from "firebase/compat/app";
+import "firebase/auth";
+import "firebase/storage";
+import "firebase/firestore";
+
 import { initializeApp } from "firebase/app";
 import { initializeAuth } from "firebase/auth/react-native";
 // import "firebase/auth";
@@ -5,16 +10,15 @@ import { getStorage } from "firebase/storage";
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAJvP_R_EsFB0Uan9HKZ2MCqerOjEU9jJE",
-  authDomain: "react-native-postphoto.firebaseapp.com",
-  projectId: "react-native-postphoto",
-  storageBucket: "react-native-postphoto.appspot.com",
-  messagingSenderId: "373666767938",
-  appId: "1:373666767938:web:46ba832067b34ea22ef9db",
-  measurementId: "G-ZDNBPPVMDR",
+  apiKey: "AIzaSyB3XOvuLw97XSYRYjn6H18Z5HgYRnlShfo",
+  authDomain: "native-photoposts.firebaseapp.com",
+  projectId: "native-photoposts",
+  storageBucket: "native-photoposts.appspot.com",
+  messagingSenderId: "596940990114",
+  appId: "1:596940990114:web:ca92bf9a259e69a0dc99fb",
+  measurementId: "G-GB0D8BG9H6",
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 export const auth = initializeAuth(app);
 export const db = getFirestore(app);

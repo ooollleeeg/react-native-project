@@ -7,7 +7,7 @@ import { UserIcon, GridIcon, PlusIcon } from "../../components/svg";
 
 const MainTab = createBottomTabNavigator();
 
-const Home = ({ route }) => {
+const Home = () => {
   return (
     <MainTab.Navigator
       initialRouteName="Posts"
@@ -20,7 +20,6 @@ const Home = ({ route }) => {
       <MainTab.Screen
         name="Posts"
         component={PostsScreen}
-        initialParams={{}} //Local for training - delete after end of project
         options={{
           tabBarIcon: ({ focused }) => <GridIcon focused={focused} />,
         }}
@@ -36,7 +35,6 @@ const Home = ({ route }) => {
       <MainTab.Screen
         name="Profile"
         component={ProfileScreen}
-        initialParams={{}} //Local for training - delete after end of project
         options={{
           tabBarIcon: ({ focused }) => <UserIcon focused={focused} />,
           tabBarStyle: { display: "none" },

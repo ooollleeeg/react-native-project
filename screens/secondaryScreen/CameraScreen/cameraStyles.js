@@ -36,17 +36,17 @@ export const cameraStyles = StyleSheet.create({
 
   previewPhotoWrapper: {
     position: "absolute",
-    left: 90,
-    top: 70,
-    width: 250,
-    height: 250,
-    borderWidth: 1,
-    borderRadius: 16,
+    top: 48,
+    alignSelf: "center",
+    width: "92%",
+    height: "45%",
+    borderWidth: 2,
     borderColor: "#FFF",
   },
   previewPhoto: {
-    width: 248,
-    height: 248,
-    borderRadius: 16,
+    width: "100%",
+    height: "100%",
+    justifyContent: "flex-end",
+    alignItems: "center",
   },
 });

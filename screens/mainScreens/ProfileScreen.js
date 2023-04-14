@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 
 import { ImageBackground, View, FlatList, Text } from "react-native";
 
@@ -8,38 +8,18 @@ import PostItem from "../../components/PostItem/PostItem";
 import { LogoutBtn } from "../../components/Buttons";
 import { selectUser } from "../../redux/auth/authSelectors";
 import { globalStyles } from "../../components/utils/globalStyles";
+import { selectPosts } from "../../redux/posts/postsSelectors";
+import { getPosts } from "../../redux/posts/postsOperations";
 
-const ProfileScreen = ({ route }) => {
-  const { userName, avatar } = useSelector(selectUser);
-  const [photos, setPhotos] = useState([]);
-  // const [avatarUri, setAvatarUri] = useState(null); // get from Redux or null
-  // const [user, setUser] = useState(null); // get from Redux or null
-
-  const { id, picture, title, descriptionLocation, latitude, longitude } =
-    route.params;
-
-  // useEffect(() => {
-  //   setAvatarUri(avatar);
-  //   setUser(userName);
-  // }, [route.params]);
+const ProfileScreen = () => {
+  const { userName } = useSelector(selectUser);
+  const posts = useSelector(selectPosts);
+  const dispatch = useDispatch();
 
   // Delete after Redux
   useEffect(() => {
-    if (id) {
-      setPhotos((prev) => [
-        ...prev,
-        {
-          id,
-          picture,
-          title,
-          descriptionLocation,
-          latitude,
-          longitude,
-          comments: [],
-        },
-      ]);
-    }
-  }, [id]);
+    dispatch(getPosts());
+  }, [dispatch]);
 
   return (
     <ImageBackground
@@ -53,15 +33,15 @@ const ProfileScreen = ({ route }) => {
           paddingBottom: 16,
         }}
       >
-        <Avatar photoUri={avatar} fromScreen="profile" />
+        <Avatar fromScreen="profile" />
         <LogoutBtn />
         <Text style={globalStyles.title}>{userName}</Text>
         <FlatList
-          data={photos}
-          keyExtractor={(photo) => photo.id}
-          renderItem={(photo) => (
+          data={posts}
+          keyExtractor={(post) => post.idPost}
+          renderItem={(post) => (
             <View style={{ marginBottom: 32 }}>
-              <PostItem photo={photo} fromScreen="profile" />
+              <PostItem post={post} fromScreen="profile" />
             </View>
           )}
         />

@@ -15,6 +15,8 @@ export const screenStyles = StyleSheet.create({
     width: 60,
     height: 60,
     borderRadius: 16,
+    borderWidth: 1,
+    borderColor: "#E8E8E8",
     marginRight: 8,
   },
   avatarName: {

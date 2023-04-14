@@ -8,28 +8,17 @@ import {
   TextInput,
   ImageBackground,
 } from "react-native";
-import Toast from "react-native-toast-message";
 
 import { authStyles } from "./authStyles";
 import { globalStyles } from "../../components/utils/globalStyles";
 import KeyboardWrapper from "../../components/KeyboardWrapper/KeyboardWrapper";
 import { MainButton } from "../../components/Buttons";
 import { EyeOffIcon, EyeOnIcon } from "../../components/svg";
-import {
-  toastConfig,
-  errorFormToast,
-  errorLoginToast,
-} from "../../components/utils/toasts";
+import { errorFormToast, errorLoginToast } from "../../components/utils/toasts";
 import { authLogin } from "../../redux/auth/authOperations";
 
-const {
-  formInput,
-  input,
-  showPasswordBtn,
-  passwordInput,
-  isAccount,
-  isAccountText,
-} = authStyles;
+const { input, showPasswordBtn, passwordInput, isAccount, isAccountText } =
+  authStyles;
 
 const initialUserData = {
   userEmail: "",
@@ -169,7 +158,6 @@ const LoginScreen = () => {
           )}
         </View>
       </ImageBackground>
-      <Toast position="top" topOffset={60} config={toastConfig} />
     </KeyboardWrapper>
   );
 };

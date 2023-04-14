@@ -2,36 +2,37 @@ import { format } from "date-fns";
 import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
-import { Text, View, TouchableOpacity, Image } from "react-native";
+import { Text, View, TouchableOpacity, ImageBackground } from "react-native";
 import { Camera } from "expo-camera";
 import * as MediaLibrary from "expo-media-library";
 import * as Location from "expo-location";
-import Toast from "react-native-toast-message";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import * as ImageManipulator from "expo-image-manipulator";
 
 import { cameraStyles } from "./cameraStyles";
-import {
-  toastConfig,
-  errorAcceptCameraToast,
-} from "../../../components/utils/toasts";
+import { errorAcceptCameraToast } from "../../../components/utils/toasts";
 import { SavePhotoIcon, FlipIcon } from "../../../components/svg";
 import { Loading } from "../../../components/utils/loading";
 import { changeAvatar } from "../../../redux/auth/authOperations";
+import { storage } from "../../../firebase/config";
+import { postsSlice } from "../../../redux/posts/postsSlice";
+
 const {
   photoView,
   cameraBtnWrapper,
   cameraBtnOut,
   cameraBtnInner,
   othersBtn,
-
   previewPhotoWrapper,
   previewPhoto,
+  previewPhotoDate,
 } = cameraStyles;
 
 const CameraScreen = ({ route }) => {
   const [cameraRef, setCameraRef] = useState(null);
-  const [photo, setPhoto] = useState(null);
   const [hasPermission, setHasPermission] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
+  const [photo, setPhoto] = useState(null);
   const [location, setLocation] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -61,21 +62,50 @@ const CameraScreen = ({ route }) => {
     setPhoto(uri);
   };
 
-  const savePhoto = () => {
-    dispatch(changeAvatar(photo));
+  const uploadPhotoToServer = async () => {
+    const { uri } = await ImageManipulator.manipulateAsync(
+      photo,
+      [{ resize: { width: 800 } }],
+      { compress: 0.7, format: ImageManipulator.SaveFormat.JPEG }
+    );
+    const res = await fetch(uri);
+    const file = await res.blob();
+    const uniqueId = Date.now().toString();
+    const storageRef =
+      fromScreen === "createPost"
+        ? ref(storage, `postsImages/post_${uniqueId}`)
+        : ref(storage, `avatarPhoto/avatar_${uniqueId}`);
+
+    try {
+      await uploadBytes(storageRef, file);
+      const processedPhoto = await getDownloadURL(storageRef);
+      return processedPhoto;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const savePhoto = async () => {
+    const downloadedPhoto = await uploadPhotoToServer();
+    if (fromScreen === "createPost") {
+      dispatch(
+        postsSlice.actions.updatePicture({
+          picture: downloadedPhoto,
+          latitude: location.latitude,
+          longitude: location.longitude,
+        })
+      );
+    } else dispatch(changeAvatar(downloadedPhoto));
 
     switch (fromScreen) {
       case "registration":
-        navigation.navigate("registration", { photoUri: photo });
+        navigation.navigate("registration", { photoUri: downloadedPhoto });
         break;
       case "profile":
-        navigation.navigate("Profile", { photoUri: photo });
+        navigation.navigate("Profile", { photoUri: downloadedPhoto });
         break;
       case "createPost":
-        navigation.navigate("CreatePost", {
-          photoUri: photo,
-          location: location,
-        });
+        navigation.navigate("CreatePost");
         break;
       default:
         break;
@@ -97,10 +127,11 @@ const CameraScreen = ({ route }) => {
           >
             {photo && (
               <View style={previewPhotoWrapper}>
-                <Image source={{ uri: photo }} style={previewPhoto} />
-                <Text style={{ color: "#FFFFFF", fontSize: 16 }}>
-                  {format(Date.now(), "	PPpp")}
-                </Text>
+                <ImageBackground source={{ uri: photo }} style={previewPhoto}>
+                  <Text style={previewPhotoDate}>
+                    {format(Date.now(), "	PPpp")}
+                  </Text>
+                </ImageBackground>
               </View>
             )}
             <View style={photoView}>
@@ -129,13 +160,21 @@ const CameraScreen = ({ route }) => {
                   <SavePhotoIcon />
                 </TouchableOpacity>
               )}
+              <TouchableOpacity
+                style={{
+                  position: "absolute",
+                  bottom: 100,
+                  alignSelf: "center",
+                }}
+                onPress={() => navigation.goBack()}
+              >
+                <Text style={{ color: "#FFF", fontSize: 20 }}>Go back</Text>
+              </TouchableOpacity>
             </View>
           </Camera>
         ) : (
           <View></View>
         )}
-
-        <Toast position="top" topOffset={60} config={toastConfig} />
       </View>
     </>
   );
